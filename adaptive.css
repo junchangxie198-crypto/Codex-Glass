@@ -1,0 +1,39 @@
+/* Adaptive materials keep text fully opaque. */
+/* Structural page and scroll containers must never become backdrop roots. */
+html:root[data-codex-dream-glass="true"] [data-dream-glass-layout="true"]{background:transparent!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;box-shadow:none!important;}
+html[data-codex-dream-glass="true"],html[data-codex-dream-glass="true"] [data-dream-glass]{
+ --dg-rgb:246,250,255;--dg-alpha:.78;--dg-ink:#142238;--dg-muted:#34435a;--dg-link:#164a94;--dg-added:#075d2b;--dg-deleted:#a31722;--dg-edge:rgba(255,255,255,.65);--dg-shadow:rgba(20,42,72,.12);
+}
+html[data-codex-dream-glass="true"][data-dream-glass-scheme="dark"],html[data-codex-dream-glass="true"] [data-dream-glass][data-dream-glass-scheme="dark"]{
+ --dg-rgb:16,24,38;--dg-alpha:.80;--dg-ink:#f4f7ff;--dg-muted:#c5d0e2;--dg-link:#a8d9ff;--dg-added:#91efb2;--dg-deleted:#ffb3ac;--dg-edge:rgba(218,232,255,.18);--dg-shadow:rgba(0,0,0,.22);
+}
+html:root[data-codex-dream-glass="true"] [data-dream-glass]{
+ --color-text:var(--dg-ink)!important;--color-text-foreground:var(--dg-ink)!important;--color-text-primary:var(--dg-ink)!important;--color-text-prose:var(--dg-ink)!important;--color-text-user-message:var(--dg-ink)!important;
+ --color-text-secondary:var(--dg-muted)!important;--color-text-tertiary:var(--dg-muted)!important;--app-color-text-foreground:var(--dg-ink)!important;--app-color-text-foreground-secondary:var(--dg-muted)!important;--app-color-text-foreground-tertiary:var(--dg-muted)!important;--app-color-text-secondary:var(--dg-muted)!important;--app-color-text-user-message:var(--dg-ink)!important;
+ --color-text-primary-ghost:var(--dg-ink)!important;--color-text-primary-ghost-hover:var(--dg-ink)!important;--color-text-primary-surface:var(--dg-ink)!important;--color-text-primary-soft:var(--dg-ink)!important;--color-text-primary-soft-alt:var(--dg-ink)!important;--color-text-primary-outline:var(--dg-ink)!important;--color-text-primary-outline-hover:var(--dg-ink)!important;
+ --color-text-secondary-ghost:var(--dg-muted)!important;--color-text-secondary-ghost-hover:var(--dg-muted)!important;--color-text-secondary-outline:var(--dg-muted)!important;--color-text-secondary-outline-hover:var(--dg-muted)!important;--color-text-secondary-soft:var(--dg-muted)!important;--color-text-secondary-soft-alt:var(--dg-muted)!important;--color-text-disabled:var(--dg-muted)!important;--color-text-execution-output:var(--dg-ink)!important;--color-text-execution-output-label:var(--dg-muted)!important;
+ --color-text-tooltip:var(--dg-ink)!important;--color-text-tooltip-classic:var(--dg-ink)!important;--color-text-tooltip-secondary:var(--dg-muted)!important;--color-text-tooltip-tertiary:var(--dg-muted)!important;--color-text-tooltip-description:var(--dg-muted)!important;--color-text-mode-toggle-inactive:var(--dg-muted)!important;--color-text-mode-toggle-primary:var(--dg-ink)!important;
+ background:rgba(var(--dg-rgb),var(--dg-alpha))!important;backdrop-filter:blur(24px) saturate(110%)!important;-webkit-backdrop-filter:blur(24px) saturate(110%)!important;
+ box-shadow:inset 0 0 0 1px var(--dg-edge),0 5px 22px var(--dg-shadow)!important;color:var(--dg-ink)!important;opacity:1!important;
+}
+html:root[data-codex-dream-glass="true"] [data-dream-glass="sidebar"]{--dg-alpha:.78;box-shadow:inset -1px 0 var(--dg-edge)!important;}
+html:root[data-codex-dream-glass="true"] [data-dream-glass="composer"]{--dg-alpha:.82;border-radius:24px!important;}
+html:root[data-codex-dream-glass="true"] [data-dream-glass="message"]{border-radius:18px!important;padding:14px 16px!important;box-sizing:border-box!important;backdrop-filter:blur(18px) saturate(110%)!important;}
+html:root[data-codex-dream-glass="true"] [data-dream-glass="user"]{border-radius:18px!important;--dg-alpha:.80;}
+html:root[data-codex-dream-glass="true"] [data-dream-glass="header"]{box-shadow:inset 0 -1px var(--dg-edge)!important;}
+html:root[data-codex-dream-glass="true"] [data-dream-glass="topbar"]{--dg-alpha:.80;box-shadow:0 8px 0 rgba(var(--dg-rgb),var(--dg-alpha)),inset 0 -1px var(--dg-edge)!important;}
+html:root[data-codex-dream-glass="true"] [data-dream-glass="topbar"] :is(button,[class*="_ButtonInner_"]){--button-text-color:var(--dg-ink)!important;--button-text-color-hover:var(--dg-ink)!important;color:var(--dg-ink)!important;}
+html:root[data-codex-dream-glass="true"] [data-dream-glass="topbar"] [role="menuitem"]:is(:hover,:focus-visible,[aria-expanded="true"]){background-color:rgba(var(--dg-rgb),.28)!important;box-shadow:inset 0 0 0 1px var(--dg-edge)!important;}
+html:root[data-codex-dream-glass="true"] :is([data-dream-glass="popup"],[data-dream-glass="card"]){border-radius:14px!important;--dg-alpha:.84;}
+html:root[data-codex-dream-glass="true"] [data-dream-glass="code"]{border-radius:12px!important;--dg-alpha:.88;}
+html:root[data-codex-dream-glass="true"] [data-dream-glass] :is([data-markdown-text-style],.ProseMirror,.sidebar-item,.sidebar-navigation,#app-shell-sidebar){color:var(--dg-ink)!important;}
+html:root[data-codex-dream-glass="true"] [data-dream-glass="sidebar"] :is(span,a){color:var(--dg-ink)!important;}
+html:root[data-codex-dream-glass="true"] [data-dream-glass] [data-markdown-text-style] :is(p,li,h1,h2,h3,h4,h5,h6,blockquote,strong,em,td,th){color:var(--dg-ink)!important;}
+html:root[data-codex-dream-glass="true"] [data-dream-glass] [data-markdown-text-style] :is(a,a span){color:var(--dg-link)!important;text-decoration-color:currentColor!important;}
+html:root[data-codex-dream-glass="true"] [data-dream-glass="composer"] .ProseMirror{background:transparent!important;caret-color:var(--dg-ink)!important;opacity:1!important;filter:none!important;}
+html:root[data-codex-dream-glass="true"] [data-dream-glass="composer"] .ProseMirror [data-placeholder]::before{color:var(--dg-muted)!important;opacity:1!important;}
+/* Outrank the wallpaper tool's per-label important color rules. */
+html:root[data-codex-dream-glass="true"][data-codex-dream-glass="true"][data-codex-dream-glass="true"] [data-dream-glass] [data-dream-glass-text="primary"]{color:var(--dg-ink)!important;}
+html:root[data-codex-dream-glass="true"][data-codex-dream-glass="true"][data-codex-dream-glass="true"] [data-dream-glass] [data-dream-glass-text="muted"]{color:var(--dg-muted)!important;}
+html:root[data-codex-dream-glass="true"] [data-dream-glass] :is(.text-codex-git-added,.text-codex-git-added *){color:var(--dg-added)!important;}
+html:root[data-codex-dream-glass="true"] [data-dream-glass] :is(.text-codex-git-deleted,.text-codex-git-deleted *){color:var(--dg-deleted)!important;}

@@ -1,0 +1,13 @@
+{
+  "name": "codex-glass",
+  "version": "3.6.14",
+  "private": true,
+  "description": "Reversible glass appearance controller for official Codex on Windows",
+  "license": "MIT",
+  "type": "module",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "build": "node build.mjs",
+    "test": "node --test control-tests.mjs wallpaper-state-tests.mjs wallpaper-payload-tests.mjs"
+  }
+}

@@ -1,0 +1,135 @@
+/* Clear glass v3: low blur on visible chrome only; no nested backdrop roots. */
+html:root[data-codex-dream-glass="true"] [data-dream-glass] {
+ --dg-rgb:249,252,255;--dg-base-alpha:.62;--dg-alpha:clamp(.15,calc(var(--dg-base-alpha) + var(--dg-density-shift,0)),.98);--dg-ink:#070f1a;--dg-muted:#162230;
+ --dg-link:#102a48;--dg-added:#064c23;--dg-deleted:#86101b;
+ --dg-edge:rgba(255,255,255,.26);--dg-shadow:rgba(8,16,26,.08);
+ backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
+ box-shadow:inset 0 0 0 1px var(--dg-edge)!important;
+}
+html:root[data-codex-dream-glass="true"] [data-dream-glass][data-dream-glass-scheme="dark"] {
+ --dg-rgb:10,16,26;--dg-base-alpha:.64;--dg-ink:#f9fbff;--dg-muted:#e8f0fa;
+ --dg-link:#e1efff;--dg-added:#d2ffdf;--dg-deleted:#ffe0dc;
+ --dg-edge:rgba(227,238,255,.15);--dg-shadow:rgba(0,0,0,.10);
+}
+html:root[data-codex-dream-glass="true"] :is([data-dream-glass="composer"],[data-dream-glass="popup"]) {--dg-base-alpha:.70;}
+html:root[data-codex-dream-glass="true"] [data-dream-glass="composer"][data-composer-utility-bar-variant="home"] > [data-composer-body] {
+ background:transparent!important;box-shadow:none!important;border-radius:inherit!important;
+}
+html:root[data-codex-dream-glass="true"] [data-dream-glass="composer-tools"][data-dg-inview="true"] {
+ backdrop-filter:blur(var(--dg-blur,4px))!important;-webkit-backdrop-filter:blur(var(--dg-blur,4px))!important;
+ color:var(--dg-ink)!important;
+}
+html:root[data-codex-dream-glass="true"] [data-dream-glass][data-dg-inview="true"]:is([data-dream-glass="topbar"],[data-dream-glass="header"],[data-dream-glass="sidebar"],[data-dream-glass="composer"],[data-dream-glass="popup"]) {
+ backdrop-filter:blur(var(--dg-blur,4px))!important;-webkit-backdrop-filter:blur(var(--dg-blur,4px))!important;
+}
+html:root[data-codex-dream-glass="true"] [data-dream-glass] [data-dream-glass] {
+ backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
+}
+/* Native surface-colored fades look like dark bars over a custom wallpaper. */
+html:root[data-codex-dream-glass="true"][data-codex-static-wallpaper] [class*="_MainContentTopFade_"],
+html:root[data-codex-dream-glass="true"][data-codex-static-wallpaper] [class*="_background_"][class*="_fade_"].pointer-events-none {
+ background:transparent!important;background-image:none!important;
+}
+html:root[data-codex-dream-glass="true"] [data-dream-glass="topbar"] {box-shadow:0 8px 0 rgba(var(--dg-rgb),var(--dg-alpha)),inset 0 -1px var(--dg-edge)!important;}
+html:root[data-codex-dream-glass="true"] [data-dream-glass="message"] {padding:12px 16px!important;}
+html:root[data-codex-dream-glass="true"] [data-dream-glass] a {text-underline-offset:.18em;}
+/* Native syntax themes remain local to each code block. */
+html:root[data-codex-dream-glass="true"] [data-dream-glass="codeblock"] {
+ --dg-base-alpha:.76;--code-block-bg:transparent;
+ border-color:var(--dg-edge)!important;border-radius:14px!important;
+ max-width:100%!important;min-width:0!important;
+}
+html:root[data-codex-dream-glass="true"] [data-code-block] :is([class*="_ActionBar_"],[class*="_StickyActionBar_"]) {
+ background:transparent!important;color:var(--dg-ink)!important;
+ position:relative!important;top:auto!important;bottom:auto!important;
+ border-bottom:1px solid var(--dg-edge)!important;
+ box-shadow:none!important;backdrop-filter:none!important;
+}
+html:root[data-codex-dream-glass="true"] [data-code-block] :is([class*="_ActionBar_"],[class*="_StickyActionBar_"]) :is(button,svg,[class*="_ButtonInner_"]) {
+ --button-text-color:var(--dg-ink)!important;--button-text-color-hover:var(--dg-ink)!important;
+ color:var(--dg-ink)!important;
+}
+html:root[data-codex-dream-glass="true"] [data-code-block-source] {
+ background:transparent!important;color:var(--dg-ink)!important;
+ max-width:100%!important;min-width:0!important;
+ overflow-x:auto!important;overflow-y:visible!important;padding-top:10px!important;
+ scrollbar-width:thin;scrollbar-color:var(--dg-muted) transparent;
+}
+html:root[data-codex-dream-glass="true"] [data-code-block-source] code {
+ color:var(--dg-ink)!important;white-space:pre-wrap!important;
+ overflow-wrap:anywhere!important;word-break:normal!important;
+ max-width:100%!important;min-width:0!important;
+}
+/* Light frost and a restrained specular edge, without nested blur layers. */
+html:root[data-codex-dream-glass="true"] [data-dream-glass][data-dg-inview="true"]:is([data-dream-glass="message"],[data-dream-glass="user"]) {
+ backdrop-filter:blur(var(--dg-blur,4px))!important;-webkit-backdrop-filter:blur(var(--dg-blur,4px))!important;
+ background-image:linear-gradient(145deg,rgba(255,255,255,.025),transparent 55%)!important;
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.20),inset 0 -1px 0 rgba(255,255,255,.055),0 4px 14px rgba(0,0,0,.08)!important;
+}
+html:root[data-codex-dream-glass="true"] [data-dream-glass] [data-dream-glass][data-dg-inview="true"]:is([data-dream-glass="message"],[data-dream-glass="user"]) {
+ backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
+}
+/* Summary-section sticky headers had an opaque white ::before strip. */
+html:root[data-codex-dream-glass="true"] [data-dream-glass="resource"] {
+ border-radius:16px!important;box-shadow:inset 0 0 0 1px var(--dg-edge),0 4px 14px var(--dg-shadow)!important;
+}
+html:root[data-codex-dream-glass="true"] [data-dream-glass="resource"][data-dg-inview="true"] {
+ backdrop-filter:blur(var(--dg-blur,4px))!important;-webkit-backdrop-filter:blur(var(--dg-blur,4px))!important;
+}
+html:root[data-codex-dream-glass="true"] [data-dream-glass="resource"] header {
+ background:transparent!important;background-image:none!important;
+ color:var(--dg-ink)!important;box-shadow:none!important;backdrop-filter:none!important;
+ --color-surface-elevated-secondary:transparent;--color-background-surface-elevated-secondary:transparent;
+}
+html:root[data-codex-dream-glass="true"] [data-dream-glass="resource"] header::before {
+ background:transparent!important;background-image:none!important;box-shadow:none!important;
+}
+html:root[data-codex-dream-glass="true"] [data-dream-glass="resource"] section::after {
+ background-color:var(--dg-edge)!important;
+}
+/* Settings panels use inline native background tokens instead of bg-surface classes. */
+html:root[data-codex-dream-glass="true"] [data-dream-glass="settings"] {
+ border-radius:16px!important;border-color:var(--dg-edge)!important;
+ box-shadow:inset 0 0 0 1px var(--dg-edge)!important;
+ backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
+}
+html:root[data-codex-dream-glass="true"] [data-dream-glass="settings"] [class~="@container/settings-row"]::after {
+ background-color:var(--dg-edge)!important;
+}
+html:root[data-codex-dream-glass="true"] [class~="group/settings"] [data-dg-surface]:not([data-dream-glass]) {
+ --button-text-color:var(--dg-ink)!important;--button-text-color-hover:var(--dg-ink)!important;
+ caret-color:var(--dg-ink)!important;border-color:var(--dg-edge)!important;
+}
+html:root[data-codex-dream-glass="true"][data-dg-blur="0"] [data-dream-glass][data-dg-inview="true"] {backdrop-filter:none!important;-webkit-backdrop-filter:none!important;}
+/* Section page headers paint an opaque pseudo-element over the glass. */
+html:root[data-codex-dream-glass="true"] [data-dream-glass="page"][data-dg-inview="true"] {
+ backdrop-filter:blur(var(--dg-blur,4px))!important;-webkit-backdrop-filter:blur(var(--dg-blur,4px))!important;
+}
+html:root[data-codex-dream-glass="true"] [data-dream-glass="page"] [data-dream-glass] {
+ backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
+}
+html:root[data-codex-dream-glass="true"] [data-dream-glass="header"][class*="_shell_"]::before {
+ background:transparent!important;background-image:none!important;box-shadow:none!important;
+}
+/* Only the outer floating panel paints glass. Nested navigation stays clear. */
+html:root[data-codex-dream-glass="true"] aside.app-shell-left-panel :is(.sidebar-navigation,nav[class*="_Navigation_"]) {
+ --dg-peek-alpha:0;
+}
+html:root[data-codex-dream-glass="true"] aside.app-shell-left-panel[data-slate-sidebar-peeking="true"][data-dream-glass="sidebar"] {
+ --dg-alpha:0;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
+}
+/* Replace the removed parent glass on the icon rail while the panel floats. */
+html:root[data-codex-dream-glass="true"] [data-dream-glass="rail"] {
+ --dg-rail-alpha:0;box-shadow:none!important;
+}
+html:root[data-codex-dream-glass="true"] aside.app-shell-left-panel[data-slate-sidebar-peeking="true"] [data-dream-glass="rail"] {
+ --dg-rail-alpha:clamp(.15,calc(var(--dg-base-alpha) + var(--dg-density-shift,0)),.98);
+ backdrop-filter:blur(var(--dg-blur,4px))!important;-webkit-backdrop-filter:blur(var(--dg-blur,4px))!important;
+}
+html:root[data-codex-dream-glass="true"] aside.app-shell-left-panel[data-slate-sidebar-peeking="true"] :is(.sidebar-navigation,nav[class*="_Navigation_"]) {
+ --dg-peek-alpha:clamp(.48,calc(var(--dg-base-alpha) + var(--dg-density-shift,0)),.86);
+ backdrop-filter:blur(max(14px,var(--dg-blur,4px)))!important;-webkit-backdrop-filter:blur(max(14px,var(--dg-blur,4px)))!important;
+}
+html:root[data-codex-dream-glass="true"] aside.app-shell-left-panel[data-slate-sidebar-peeking="true"] .sidebar-navigation :is(.sidebar-navigation,nav[class*="_Navigation_"]) {
+ --dg-peek-alpha:0;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
+}

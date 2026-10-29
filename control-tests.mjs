@@ -1,0 +1,24 @@
+import assert from 'node:assert/strict';
+import {test} from 'node:test';
+import {reconcile,normalizeDensity,normalizeBlur} from './watch-state.mjs';
+const snapshot={url:'app://-/index.html',ready:true,active:false,density:64,blur:4,expectedVersion:'3.6.0'};
+function scenario(state,extra={}){
+  const calls=[];
+  let density=extra.density??64,blur=extra.blur??4;
+  return {calls,args:{state,snapshot:{...snapshot,...extra},apply:'APPLY',restore:'RESTORE',evaluate:async code=>{calls.push(code);if(code==='APPLY'){density=64;blur=4;return{applied:true,density,blur};}if(code==='RESTORE')return{restored:true};const m=code.match(/\.setDensity\((\d+)\)/);if(m){density=Number(m[1]);return density;}const b=code.match(/\.setBlur\((\d+)\)/);if(b){blur=Number(b[1]);return blur;}return{active:true,version:'3.6.0',density,blur};}}};
+}
+test('enabled switch applies after a fresh process and checks the result',async()=>{const s=scenario({enabled:true});assert.equal((await reconcile(s.args)).status,'on');assert.equal(s.calls[0],'APPLY');assert.equal(s.calls.length,2);});
+test('idle polling preserves active observers and does not reinject',async()=>{const s=scenario({enabled:true},{active:true,version:'3.6.0'});await reconcile(s.args);assert.equal(s.calls.length,1);assert.notEqual(s.calls[0],'APPLY');});
+test('disabled switch removes live styling and remains disabled after reload',async()=>{const s=scenario({enabled:false},{active:true});assert.equal((await reconcile(s.args)).status,'off');assert.deepEqual(s.calls,['RESTORE']);s.args.snapshot.active=false;await reconcile(s.args);assert.equal(s.calls.length,1);});
+test('enabled switch recovers lost styling after renderer reload',async()=>{const s=scenario({enabled:true},{active:true,version:'3.6.0'});await reconcile(s.args);s.args.snapshot.active=false;await reconcile(s.args);assert.equal(s.calls.filter(c=>c==='APPLY').length,1);});
+test('loading native panels defers injection',async()=>{const s=scenario({enabled:true},{ready:false});assert.equal((await reconcile(s.args)).status,'waiting');assert.equal(s.calls.length,0);});
+test('external and in-app browser pages are rejected before mutation',async()=>{for(const url of ['https://example.com','app://-/browser.html']){const s=scenario({enabled:true},{url});await assert.rejects(reconcile(s.args),/navigated/);assert.equal(s.calls.length,0);}});
+test('failed apply cannot be reported as enabled',async()=>{const s=scenario({enabled:true});s.args.evaluate=async()=>({applied:false});await assert.rejects(reconcile(s.args),/did not succeed/);});
+test('saved density restores after a new process or renderer reload',async()=>{const s=scenario({enabled:true,density:85});const result=await reconcile(s.args);assert.equal(result.density,85);assert.equal(s.calls.filter(c=>c==='APPLY').length,1);assert(s.calls.some(c=>c.includes('setDensity(85)')));});
+test('moving slider updates density without recreating glass observers',async()=>{const s=scenario({enabled:true,density:40},{active:true,version:'3.6.0',density:64});assert.equal((await reconcile(s.args)).density,40);assert(!s.calls.includes('APPLY'));assert(s.calls[0].includes('setDensity(40)'));});
+test('disabled slider preference cannot re-enable glass',async()=>{const s=scenario({enabled:false,density:85});assert.equal((await reconcile(s.args)).status,'off');assert.equal(s.calls.length,0);});
+test('legacy and invalid preferences get a bounded numeric density',()=>{assert.equal(normalizeDensity(undefined),64);assert.equal(normalizeDensity('85'),64);assert.equal(normalizeDensity(NaN),64);assert.equal(normalizeDensity(-1),30);assert.equal(normalizeDensity(200),95);assert.equal(normalizeDensity(64.7),65);});
+test('blur changes do not change saved color depth or reinject the skin',async()=>{const s=scenario({enabled:true,density:30,blur:12},{active:true,version:'3.6.0',density:30,blur:4});const r=await reconcile(s.args);assert.equal(r.density,30);assert.equal(r.blur,12);assert(!s.calls.includes('APPLY'));assert(!s.calls.some(x=>x.includes('setDensity(')));});
+test('color depth changes preserve independently selected blur',async()=>{const s=scenario({enabled:true,density:80,blur:12},{active:true,version:'3.6.0',density:30,blur:12});const r=await reconcile(s.args);assert.equal(r.density,80);assert.equal(r.blur,12);assert(!s.calls.some(x=>x.includes('setBlur(')));});
+test('fresh session restores both parameters including zero blur',async()=>{const s=scenario({enabled:true,density:30,blur:0});const r=await reconcile(s.args);assert.equal(r.density,30);assert.equal(r.blur,0);assert(s.calls.some(x=>x.includes('setBlur(0)')));});
+test('legacy blur defaults to existing 4px and rejects invalid values',()=>{assert.equal(normalizeBlur(undefined),4);assert.equal(normalizeBlur(NaN),4);assert.equal(normalizeBlur('10'),4);assert.equal(normalizeBlur(-2),0);assert.equal(normalizeBlur(99),20);});
